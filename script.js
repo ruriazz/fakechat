@@ -129,7 +129,7 @@ $(document).ready(() => {
         from_me: false,
         text: `Connection disconnected`,
         sent_on: new Date(),
-      });
+      }, true);
     });
 
     messageInput.keydown(function (e) { 13 !== e.keyCode || e.shiftKey || (e.preventDefault(), emit()) });
