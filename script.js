@@ -104,6 +104,7 @@ $(document).ready(() => {
         item.sent_on = new Date(`${item.sent_on}Z`);
         newMessage(item)
       });
+      playNotification();
     });
     socket.on("message", (data) => {
       data.sent_on = new Date(`${data.sent_on}Z`);
