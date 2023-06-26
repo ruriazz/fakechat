@@ -127,7 +127,7 @@ $(document).ready(() => {
       console.log("\uD83D\uDD34 %cdisconnected", "font-weight: bold; color: red;");
       newMessage({
         from_me: false,
-        text: `Connection disconnected`,
+        text: `Connection disconnected\n\nuse <strong>:reset</strong> to reconfigure your connection`,
         sent_on: new Date(),
       }, true);
     });
