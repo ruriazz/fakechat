@@ -1,6 +1,14 @@
 const newMessage = (chat) => {
   const chatMessages = $('div.chat');
   let dClass = chat.from_me ? 'self' : 'other';
+  if (chat.text.trim() == "") {
+    return;
+  }
+
+  if (!chat.text.trim().startsWith("<pre>")) {
+    chat.text = `<pre>${chat.text}</pre>`;
+  }
+
   chatMessages.append(`<div class="${dClass}"><div class="dialog">${chat.text}</div><p>${chat.sent_on.getHours()}:${chat.sent_on.getMinutes()}</p></div>`);
   const contentHeight = chatMessages.prop('scrollHeight');
   const viewportHeight = chatMessages.height();

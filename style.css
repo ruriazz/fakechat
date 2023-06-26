@@ -100,10 +100,17 @@ img {
     scroll-behavior: smooth;
 }
 
+.chat::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
 .chat img {
     width: 40px;
     height: 40px;
     margin-right: 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .dialog {
@@ -174,4 +181,5 @@ pre {
     margin-bottom: 0;
     overflow: hidden;
     white-space: pre-wrap;
+    line-height: 1.3em;
 }
