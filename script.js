@@ -37,6 +37,16 @@ const clearProgress = (intervalId) => {
   headMessages.html('')
 }
 
+const playNotification = () => {
+  try {
+    const sound = document.getElementById("notification-sound");
+    sound.currentTime = 0;
+    sound.play();
+  } catch (err) {
+    console.log("error:", err);
+  }
+}
+
 const getWSAddress = () => Cookies.get('WSAddress');
 const setWSAddress = (val) => Cookies.set('WSAddress', val, { expires: 7 });
 const unsetWSAddress = () => Cookies.remove('WSAddress');
@@ -63,6 +73,7 @@ $(document).ready(() => {
     }
 
     const socket = io(server, {
+      forceNew: true,
       path: path,
       transports: ['websocket'],
       auth: authObj
@@ -96,7 +107,10 @@ $(document).ready(() => {
     });
     socket.on("message", (data) => {
       data.sent_on = new Date(`${data.sent_on}Z`);
-      newMessage(data)
+      newMessage(data);
+      if (!data.from_me) {
+        playNotification();
+      }
     });
     socket.on('typing', (data) => {
       if (data.state == 'BEGIN') {
