@@ -85,12 +85,7 @@ $(document).ready(() => {
     socket.on("ready", data => {
       newMessage({
         from_me: false,
-        text: `Socket connected to <strong>${server}</strong>`,
-        sent_on: new Date(),
-      });
-      newMessage({
-        from_me: false,
-        text: "use <strong>:reset</strong> to reconfigure your connection",
+        text: `Socket connected to <strong>${server}</strong>\n\nuse <strong>:reset</strong> to reconfigure your connection`,
         sent_on: new Date(),
       });
       $('div.ic').html('🟢');
