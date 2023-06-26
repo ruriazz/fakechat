@@ -71,7 +71,7 @@ $(document).ready(() => {
     socket.io.on("error", (error) => {
       newMessage({
         from_me: false,
-        text: `Error: ${error.message}\nFailed connctiong to '${server}'\npath: ${path}\nauth: ${JSON.stringify(authObj, null, 2)}\n\nuse <strong>:reset</strong> to reconfigure your connection`,
+        text: `Error: ${error.message}\nFailed connctiong to <strong>${server}</strong>\npath: ${path}\nauth: ${JSON.stringify(authObj, null, 2)}\n\nuse <strong>:reset</strong> to reconfigure your connection`,
         sent_on: new Date(),
       }, true)
     });
@@ -125,6 +125,11 @@ $(document).ready(() => {
     socket.on('disconnect', () => {
       $('div.ic').html('🔴');
       console.log("\uD83D\uDD34 %cdisconnected", "font-weight: bold; color: red;");
+      newMessage({
+        from_me: false,
+        text: `Connection disconnected`,
+        sent_on: new Date(),
+      });
     });
 
     messageInput.keydown(function (e) { 13 !== e.keyCode || e.shiftKey || (e.preventDefault(), emit()) });
