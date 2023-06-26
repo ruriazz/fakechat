@@ -124,7 +124,8 @@ img {
 }
 
 .other,
-.self {
+.self,
+.error {
     margin-left: 10px;
     margin-bottom: 10px;
     display: flex;
@@ -137,6 +138,10 @@ img {
 .self .dialog {
     background: #9eea9e;
     margin: 0 15px;
+}
+
+.error .dialog {
+    background: #c79a97 !important;
 }
 
 .chat p {
@@ -180,6 +185,11 @@ pre {
     margin-top: 0;
     margin-bottom: 0;
     overflow: hidden;
+    word-wrap: break-word;
     white-space: pre-wrap;
     line-height: 1.3em;
+}
+
+#message-input {
+    padding: .375rem;
 }

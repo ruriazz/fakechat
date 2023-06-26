@@ -1,4 +1,4 @@
-const newMessage = (chat) => {
+const newMessage = (chat, error = false) => {
   const chatMessages = $('div.chat');
   let dClass = chat.from_me ? 'self' : 'other';
   if (chat.text.trim() == "") {
@@ -7,6 +7,10 @@ const newMessage = (chat) => {
 
   if (!chat.text.trim().startsWith("<pre>")) {
     chat.text = `<pre>${chat.text}</pre>`;
+  }
+
+  if (error) {
+    dClass = "error";
   }
 
   chatMessages.append(`<div class="${dClass}"><div class="dialog">${chat.text}</div><p>${chat.sent_on.getHours()}:${chat.sent_on.getMinutes()}</p></div>`);
@@ -47,6 +51,7 @@ const unsetWSAuth = () => Cookies.remove('WSAuth');
 
 
 $(document).ready(() => {
+  $('#message-input').focus();
   const server = getWSAddress();
   const path = getWSPath();
   const auth = getWSAuth();
@@ -62,6 +67,17 @@ $(document).ready(() => {
       transports: ['websocket'],
       auth: authObj
     });
+
+    socket.io.on("error", (error) => {
+      newMessage({
+        from_me: false,
+        text: `Error: ${error.message}\nFailed connctiong to '${server}'\npath: ${path}\nauth: ${JSON.stringify(authObj, null, 2)}\n\nuse <strong>:reset</strong> to reconfigure your connection`,
+        sent_on: new Date(),
+      }, true)
+    });
+
+    socket.io.on("reconnect", (_) => $('div.ic').html('🟠'));
+
     const messageInput = $('#message-input');
     const typingSessions = [];
     let loaderId = null;
@@ -70,6 +86,11 @@ $(document).ready(() => {
       newMessage({
         from_me: false,
         text: `Socket connected to <strong>${server}</strong>`,
+        sent_on: new Date(),
+      });
+      newMessage({
+        from_me: false,
+        text: "use <strong>:reset</strong> to reconfigure your connection",
         sent_on: new Date(),
       });
       $('div.ic').html('🟢');
@@ -100,6 +121,7 @@ $(document).ready(() => {
       }
       console.log(data);
     });
+
     socket.on('disconnect', () => {
       $('div.ic').html('🔴');
       console.log("\uD83D\uDD34 %cdisconnected", "font-weight: bold; color: red;");
@@ -159,7 +181,7 @@ $(document).ready(() => {
       messageInput.keydown(function (e) {
         13 !== e.keyCode || e.shiftKey || (() => {
           e.preventDefault();
-          
+
           if (!provided) {
             setWSPath(messageInput.val().trim());
             newMessage({
